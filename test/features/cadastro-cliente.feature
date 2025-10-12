@@ -29,8 +29,18 @@ Feature: Cadastro de Cliente
     Given que o banco de dados de teste está limpo
     When eu envio uma requisição POST para "/customer" com:
       | name | lastName | cpf         | phone      | zipCode   | user.email        | user.password  |
-      |  kevin  | Júnior   | 12901 | 11987654321| 01001000 | kevinJr#email.com | minhasenha123 |
+      |  kevin  | Júnior   | 12345678901 | 11987654321| 01001000 | kevinJr#email.com | minhasenha123 |
     Then o sistema deve retornar status 400
-    And o corpo deve conter a mensagem "O CPF deve conter apenas números e ter 11 caracteres"
+    And o corpo deve conter a mensagem "E-mail inválido"
+
+  Scenario: Erro ao verificar Senha não preenchida
+    Given que o banco de dados de teste está limpo
+    When eu envio uma requisição POST para "/customer" com:
+      | name | lastName | cpf         | phone      | zipCode   | user.email        | user.password  |
+      |  kevin  | Júnior   | 12345678901 | 11987654321| 01001000 | kevinJr@email.com |  |
+    Then o sistema deve retornar status 400
+    And o corpo deve conter a mensagem "Senha não preenchida"
+
+
 
     
