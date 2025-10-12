@@ -9,7 +9,7 @@ async function bootstrap() {
       whitelist: true, // remove propriedades não definidas no DTO
       forbidNonWhitelisted: true,
       transform: true, // transforma JSON em instância do DTO
-      stopAtFirstError: true, // opcional: para na primeira falha de validação
+      stopAtFirstError: true, // para na primeira falha de validação
     }),
   );
   await app.listen(process.env.PORT ?? 3000);

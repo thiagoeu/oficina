@@ -9,13 +9,13 @@ POST {{baseUrl}}/customer
 Content-Type: application/json  
 
 {
-  "name": "Thiago",
+  "name": "",
   "lastName": "Araujo",
-  "cpf": "12111111",
-  "phone": "11999999999",
-  "zipCode": "12345678",
+  "cpf": "12312312345",
+  "phone": "12333133",
+  "zipCode": "00000-000",
   "user": {
-    "email": "t1ago#s.aom",
+    "email": "t1o121@teste.com",
     "password": "minhasenha123"
   }
 }

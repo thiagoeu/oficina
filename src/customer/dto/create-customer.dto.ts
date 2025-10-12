@@ -1,24 +1,47 @@
-import { IsString, Matches, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  Matches,
+  ValidateNested,
+  Length,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 export class CreateCustomerDto {
-  @IsString({ message: 'O nome deve ser uma string' })
+  @IsNotEmpty({ message: 'Nome é obrigatório' })
+  @IsString({ message: 'O nome deve conter apenas letras' })
+  @Matches(/^[A-Za-zÀ-ÿ\s]*$/, {
+    message: 'O nome deve conter apenas letras',
+  })
   name: string;
 
-  @IsString({ message: 'O sobrenome deve ser uma string' })
+  @IsNotEmpty({ message: 'Sobrenome é obrigatório' })
+  @IsString({ message: 'O sobrenome deve conter apenas letras' })
+  @Matches(/^[A-Za-zÀ-ÿ\s]*$/, {
+    message: 'O sobrenome deve conter apenas letras',
+  })
   lastName: string;
 
-  @IsString({ message: 'O CPF deve ser uma string' })
+  @IsNotEmpty({ message: 'CPF é obrigatório' })
+  @IsString({ message: 'CPF inválido' })
+  @Matches(/^(\d{11})?$/, {
+    message: 'O CPF deve conter apenas números e ter 11 caracteres',
+  })
   cpf: string;
 
+  @IsNotEmpty({ message: 'Telefone é obrigatório' })
   @IsString({ message: 'O telefone deve conter apenas números' })
-  @Matches(/^\d+$/, { message: 'O telefone deve conter apenas números' })
-  phone: string; // <- mudou para string
+  @Length(10, 11, { message: 'O telefone deve ter 10 ou 11 dígitos' })
+  @Matches(/^\d*$/, { message: 'O telefone deve conter apenas números' })
+  phone: string;
 
-  @IsString({ message: 'O CEP deve conter apenas números' })
-  @Matches(/^\d+$/, { message: 'O CEP deve conter apenas números' })
-  zipCode: string; // <- mudou para string
+  @IsNotEmpty({ message: 'CEP é obrigatório' })
+  @IsString({ message: 'O CEP deve ser uma string' })
+  @Matches(/^(\d{8})?$/, {
+    message: 'O CEP deve conter apenas números e ter exatamente 8 digitos',
+  })
+  zipCode: string;
 
   @ValidateNested()
   @Type(() => CreateUserDto)

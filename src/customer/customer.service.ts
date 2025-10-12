@@ -20,6 +20,7 @@ export class CustomerService {
     const customerExist = await this.customerRepository.findOne({
       where: { cpf: createCustomerDto.cpf },
     });
+
     if (customerExist) {
       throw new ConflictException('Cliente já possui cadastro');
     }
@@ -27,11 +28,14 @@ export class CustomerService {
     const emailExist = await this.userRepository.findOne({
       where: { email: createCustomerDto.user.email },
     });
+
     if (emailExist) {
       throw new ConflictException('E-mail já está em uso');
     }
 
-    return this.customerRepository.save(createCustomerDto);
+    const user = this.customerRepository.save(createCustomerDto);
+
+    return user;
   }
 
   findAll() {
