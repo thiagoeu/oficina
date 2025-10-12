@@ -29,12 +29,12 @@ export class Vehicle {
   @Column({ unique: true })
   plate: string;
 
-  // Relação obrigatória com Customer
-  @ManyToOne(() => Customer, (customer) => customer.vehicle, {
-    nullable: false,
-  })
-  @JoinColumn()
-  customer: Customer;
+  // // Relação obrigatória com Customer
+  // @ManyToOne(() => Customer, (customer) => customer.vehicle, {
+  //   nullable: false,
+  // })
+  // @JoinColumn()
+  // customer: Customer;
 
   @OneToMany(() => ServiceOrder, (order) => order.vehicle)
   serviceOrders: ServiceOrder[];

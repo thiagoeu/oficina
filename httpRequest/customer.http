@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:3000
+
+### Listar clientes
+GET {{baseUrl}}/customer
+Content-Type: application/json
+
+### Criar clientes
+POST {{baseUrl}}/customer
+Content-Type: application/json  
+
+{
+  "name": "Thiago",
+  "lastName": "Araujo",
+  "cpf": "12111111",
+  "phone": "11999999999",
+  "zipCode": "12345678",
+  "user": {
+    "email": "t1ago#s.aom",
+    "password": "minhasenha123"
+  }
+}

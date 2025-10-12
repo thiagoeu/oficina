@@ -1,6 +1,6 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   Column,
   OneToOne,
   JoinColumn,
@@ -18,18 +18,18 @@ export class Customer {
   @Column()
   lastName: string;
 
-  @Column({ unique: true })
+  @PrimaryColumn()
   cpf: string;
 
   @Column()
-  phone: number;
+  phone: string;
 
   @Column()
-  zipCode: number;
+  zipCode: string;
 
-  @ManyToOne(() => Vehicle, (vehicle) => vehicle.serviceOrders)
-  @JoinColumn()
-  vehicle: Vehicle;
+  // @ManyToOne(() => Vehicle, (vehicle) => vehicle.serviceOrders)
+  // @JoinColumn()
+  // vehicle: Vehicle;
 
   // Relacionamento 1:1 com User
   @OneToOne(() => User, { cascade: true, eager: true })
