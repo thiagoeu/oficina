@@ -13,9 +13,9 @@ Content-Type: application/json
   "lastName": "gelo",
   "cpf": "67891121111",
   "phone": "12345678901",
-  "zipCode": "00000000",
+  "zipCode": "12345678",
   "user": {
     "email": "t1o1wq12211@teste.com",
-    "password": ""
+    "password": "123"
   }
 }

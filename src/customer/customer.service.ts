@@ -33,8 +33,8 @@ export class CustomerService {
     if (emailExist) throw new ConflictException('E-mail já está em uso');
 
     // Verifica se a senha tem pelo menos 6 caracteres
-    if (userData.password.length < 6)
-      throw new ConflictException('Senha deve ter pelo menos 6 caracteres');
+    if (userData.password.length < 5)
+      throw new ConflictException('Senha deve conter pelo menos 5 caracteres');
 
     // Cria o usuário primeiro
     const user = this.userRepository.create(userData);

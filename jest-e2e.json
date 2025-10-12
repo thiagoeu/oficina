@@ -1,4 +1,3 @@
-// NO ARQUIVO jest-e2e.json (AGORA NA RAIZ)
 {
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": ".",

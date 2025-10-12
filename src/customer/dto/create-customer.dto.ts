@@ -39,7 +39,8 @@ export class CreateCustomerDto {
   @IsNotEmpty({ message: 'CEP é obrigatório' })
   @IsString({ message: 'O CEP deve ser uma string' })
   @Matches(/^(\d{8})?$/, {
-    message: 'O CEP deve conter apenas números e ter exatamente 8 digitos',
+    message:
+      'CEP inválido, deve conter apenas números e ter exatamente 8 digitos',
   })
   zipCode: string;
 

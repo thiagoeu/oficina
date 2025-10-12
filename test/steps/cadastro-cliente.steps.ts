@@ -210,4 +210,29 @@ defineFeature(feature, (test) => {
       expect(response.body.message[0]).toMatch(new RegExp(msg, 'i'));
     });
   });
+
+  // Cenário 6: CEP inválido
+  test('Erro ao verificar CEP inválido', ({ given, when, then, and }) => {
+    given('que o banco de dados de teste está limpo', async () => {
+      if (dataSource) await dataSource.synchronize(true);
+    });
+
+    when(
+      /^eu envio uma requisição POST para "\/customer" com:$/,
+      async (table) => {
+        const row = table[0];
+        const finalPayload = mapTableToPayload(row);
+        console.log('Payload enviado:', finalPayload);
+        response = await request(server).post('/customer').send(finalPayload);
+      },
+    );
+
+    then('o sistema deve retornar status 400', () => {
+      expect(response.status).toBe(400);
+    });
+
+    and(/^o corpo deve conter a mensagem "(.*)"$/, (msg) => {
+      expect(response.body.message[0]).toMatch(new RegExp(msg, 'i'));
+    });
+  });
 });

@@ -41,6 +41,16 @@ Feature: Cadastro de Cliente
     Then o sistema deve retornar status 400
     And o corpo deve conter a mensagem "Senha não preenchida"
 
+  Scenario: Erro ao verificar CEP inválido
+    Given que o banco de dados de teste está limpo
+    When eu envio uma requisição POST para "/customer" com:
+      | name | lastName | cpf         | phone      | zipCode   | user.email        | user.password  |
+      |  kevin  | Júnior   | 12345678901 | 11987654321| 01000 | kevinJr@email.com | minhasenha123 |
+    Then o sistema deve retornar status 400
+    And o corpo deve conter a mensagem "CEP inválido, deve conter apenas números e ter exatamente 8 digito"
+
+
+
 
 
     
