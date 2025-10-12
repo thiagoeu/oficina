@@ -17,25 +17,33 @@ export class CustomerService {
   ) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
+    const { user: userData, cpf } = createCustomerDto;
+
+    // Verifica se o CPF já existe
     const customerExist = await this.customerRepository.findOne({
-      where: { cpf: createCustomerDto.cpf },
+      where: { cpf },
     });
-
-    if (customerExist) {
+    if (customerExist)
       throw new ConflictException('Cliente já possui cadastro');
-    }
 
+    // Verifica se o e-mail já existe
     const emailExist = await this.userRepository.findOne({
-      where: { email: createCustomerDto.user.email },
+      where: { email: userData.email },
     });
+    if (emailExist) throw new ConflictException('E-mail já está em uso');
 
-    if (emailExist) {
-      throw new ConflictException('E-mail já está em uso');
-    }
+    // Cria o usuário primeiro
+    const user = this.userRepository.create(userData);
+    await this.userRepository.save(user);
 
-    const user = this.customerRepository.save(createCustomerDto);
+    // Cria o cliente e vincula o usuário
+    const customer = this.customerRepository.create({
+      ...createCustomerDto,
+      user,
+    });
+    await this.customerRepository.save(customer);
 
-    return user;
+    return { message: 'Cliente cadastrado com sucesso', customer };
   }
 
   findAll() {
