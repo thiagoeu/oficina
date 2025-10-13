@@ -45,7 +45,6 @@ defineFeature(feature, (test) => {
 
     app = moduleFixture.createNestApplication();
 
-    // ---- Correção: Ativa validação global ----
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -53,7 +52,6 @@ defineFeature(feature, (test) => {
         transform: true,
       }),
     );
-    // -----------------------------------------
 
     await app.init();
     server = app.getHttpServer();
@@ -65,10 +63,19 @@ defineFeature(feature, (test) => {
     await app.close();
   });
 
+  // Função auxiliar para garantir ambiente limpo
+  async function prepareDatabase() {
+    if (!dataSource || !dataSource.isInitialized) return;
+    const tablesToClean = ['customers', 'users'];
+    for (const table of tablesToClean) {
+      await dataSource.query(`DELETE FROM "${table}";`);
+    }
+  }
+
   // Cenário 1: Cliente cadastrado com sucesso
   test('Cliente cadastrado com sucesso', ({ given, when, then, and }) => {
     given('que o banco de dados de teste está limpo', async () => {
-      if (dataSource) await dataSource.synchronize(true);
+      await prepareDatabase();
     });
 
     when(
@@ -92,6 +99,7 @@ defineFeature(feature, (test) => {
       },
     );
   });
+
   // Cenário 2: Nome obrigatório
   test('Erro ao cadastrar cliente com Nome vazio', ({
     given,
@@ -100,7 +108,7 @@ defineFeature(feature, (test) => {
     and,
   }) => {
     given('que o banco de dados de teste está limpo', async () => {
-      if (dataSource) await dataSource.synchronize(true);
+      await prepareDatabase();
     });
 
     when(
@@ -121,6 +129,7 @@ defineFeature(feature, (test) => {
       expect(response.body.message[0]).toMatch(new RegExp(msg, 'i'));
     });
   });
+
   // Cenário 3: CPF invalido
   test('Erro ao cadastrar cliente com CPF invalido', ({
     given,
@@ -129,7 +138,7 @@ defineFeature(feature, (test) => {
     and,
   }) => {
     given('que o banco de dados de teste está limpo', async () => {
-      if (dataSource) await dataSource.synchronize(true);
+      await prepareDatabase();
     });
 
     when(
@@ -159,7 +168,7 @@ defineFeature(feature, (test) => {
     and,
   }) => {
     given('que o banco de dados de teste está limpo', async () => {
-      if (dataSource) await dataSource.synchronize(true);
+      await prepareDatabase();
     });
 
     when(
@@ -189,7 +198,7 @@ defineFeature(feature, (test) => {
     and,
   }) => {
     given('que o banco de dados de teste está limpo', async () => {
-      if (dataSource) await dataSource.synchronize(true);
+      await prepareDatabase();
     });
 
     when(
@@ -214,7 +223,7 @@ defineFeature(feature, (test) => {
   // Cenário 6: CEP inválido
   test('Erro ao verificar CEP inválido', ({ given, when, then, and }) => {
     given('que o banco de dados de teste está limpo', async () => {
-      if (dataSource) await dataSource.synchronize(true);
+      await prepareDatabase();
     });
 
     when(
@@ -233,6 +242,121 @@ defineFeature(feature, (test) => {
 
     and(/^o corpo deve conter a mensagem "(.*)"$/, (msg) => {
       expect(response.body.message[0]).toMatch(new RegExp(msg, 'i'));
+    });
+  });
+
+  // Cenário 7: Verificar senha com menos de 8 caracteres
+  test('Erro ao verificar senha com menos de 8 caracteres', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
+    given('que o banco de dados de teste está limpo', async () => {
+      await prepareDatabase();
+    });
+
+    when(
+      /^eu envio uma requisição POST para "\/customer" com:$/,
+      async (table) => {
+        const row = table[0];
+        const finalPayload = mapTableToPayload(row);
+        console.log('Payload enviado:', finalPayload);
+        response = await request(server).post('/customer').send(finalPayload);
+      },
+    );
+
+    then('o sistema deve retornar status 409', () => {
+      expect(response.status).toBe(409);
+    });
+
+    and(/^o corpo deve conter a mensagem "(.*)"$/, (msg) => {
+      const msgBody = Array.isArray(response.body.message)
+        ? response.body.message[0]
+        : response.body.message;
+      expect(msgBody).toMatch(new RegExp(msg, 'i'));
+    });
+  });
+
+  // Cenário 8:  Verificar número de telefone com menos dígitos
+  test('Erro ao verificar número de telefone com menos dígitos', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
+    given('que o banco de dados de teste está limpo', async () => {
+      await prepareDatabase();
+    });
+
+    when(
+      /^eu envio uma requisição POST para "\/customer" com:$/,
+      async (table) => {
+        const row = table[0];
+        const finalPayload = mapTableToPayload(row);
+        console.log('Payload enviado:', finalPayload);
+        response = await request(server).post('/customer').send(finalPayload);
+      },
+    );
+
+    then('o sistema deve retornar status 400', () => {
+      expect(response.status).toBe(400);
+    });
+
+    and(/^o corpo deve conter a mensagem "(.*)"$/, (msg) => {
+      expect(response.body.message[0]).toMatch(new RegExp(msg, 'i'));
+    });
+  });
+
+  // Cenário 9: CPF duplicado
+  test('Erro ao cadastrar cliente com CPF duplicado', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
+    given('que o banco de dados de teste está limpo', async () => {
+      await prepareDatabase();
+    });
+
+    given(
+      /^que já existe um cliente cadastrado com CPF "(.*)"$/,
+      async (cpf) => {
+        const existingCustomer = {
+          name: 'Carlos',
+          lastName: 'Silva',
+          cpf,
+          phone: '11987654321',
+          zipCode: '01001000',
+          user: {
+            email: 'carlos@email.com',
+            password: 'minhasenha123',
+          },
+        };
+
+        // Cria o cliente inicial para gerar o CPF duplicado
+        await request(server).post('/customer').send(existingCustomer);
+      },
+    );
+
+    when(
+      /^eu envio uma requisição POST para "\/customer" com:$/,
+      async (table) => {
+        const row = table[0];
+        const finalPayload = mapTableToPayload(row);
+        response = await request(server).post('/customer').send(finalPayload);
+      },
+    );
+
+    then('o sistema deve retornar status 409', () => {
+      expect(response.status).toBe(409);
+    });
+
+    and(/^o corpo deve conter a mensagem "(.*)"$/, (msg) => {
+      const msgBody = Array.isArray(response.body.message)
+        ? response.body.message[0]
+        : response.body.message;
+      expect(msgBody).toMatch(new RegExp(msg, 'i'));
     });
   });
 });
