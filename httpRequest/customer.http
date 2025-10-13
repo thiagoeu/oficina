@@ -11,11 +11,11 @@ Content-Type: application/json
 {
   "name": "asda",
   "lastName": "gelo",
-  "cpf": "67891121111",
-  "phone": "12345678901",
+  "cpf": "67812112111",
+  "phone": "1234811901",
   "zipCode": "12345678",
   "user": {
-    "email": "t1o1wq12211@teste.com",
-    "password": "123"
+    "email": "t11@teste.com",
+    "password": "11231231223"
   }
 }
