@@ -83,7 +83,7 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
-        console.log('Payload enviado:', finalPayload);
+        //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
       },
     );
@@ -116,7 +116,7 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
-        console.log('Payload enviado:', finalPayload);
+        //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
       },
     );
@@ -146,7 +146,7 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
-        console.log('Payload enviado:', finalPayload);
+        //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
       },
     );
@@ -176,7 +176,7 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
-        console.log('Payload enviado:', finalPayload);
+        //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
       },
     );
@@ -206,7 +206,7 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
-        console.log('Payload enviado:', finalPayload);
+        //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
       },
     );
@@ -231,7 +231,7 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
-        console.log('Payload enviado:', finalPayload);
+        //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
       },
     );
@@ -261,7 +261,7 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
-        console.log('Payload enviado:', finalPayload);
+        //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
       },
     );
@@ -294,7 +294,7 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
-        console.log('Payload enviado:', finalPayload);
+        //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
       },
     );

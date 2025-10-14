@@ -1,0 +1,19 @@
+@baseUrl = http://localhost:3000
+
+### Listar clientes
+GET {{baseUrl}}/vehicle
+Content-Type: application/json
+
+### Criar clientes
+POST {{baseUrl}}/vehicle
+Content-Type: application/json  
+
+{
+  "plate": "ABC1D223",
+  "brand": "Toyota",
+  "model": "Corolla",
+  "color": "Prata",
+  "year": 2021,
+  "customerId": 85
+}
+
