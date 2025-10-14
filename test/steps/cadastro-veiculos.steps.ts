@@ -11,21 +11,9 @@ function mapTableToPayload(row: Record<string, any>): any {
   const payload: any = {};
   for (const key in row) {
     if (!row.hasOwnProperty(key)) continue;
-    if (key.includes('.')) {
-      const parts = key.split('.');
-      let current = payload;
-      for (let i = 0; i < parts.length; i++) {
-        const part = parts[i];
-        if (i === parts.length - 1) {
-          current[part] = row[key];
-        } else {
-          if (!current[part]) current[part] = {};
-          current = current[part];
-        }
-      }
-    } else {
-      payload[key] = row[key];
-    }
+    let value: any = row[key];
+    if (['year'].includes(key.toLowerCase())) value = Number(value);
+    payload[key] = value;
   }
   return payload;
 }
@@ -50,6 +38,7 @@ defineFeature(feature, (test) => {
         transform: true,
       }),
     );
+
     await app.init();
     server = app.getHttpServer();
     dataSource = moduleFixture.get<DataSource>(DataSource);
@@ -78,26 +67,25 @@ defineFeature(feature, (test) => {
     });
 
     and('existe um cliente previamente cadastrado', async () => {
-      // Cria cliente com user aninhado
-      const customerRes = await request(server)
-        .post('/customer')
-        .send({
-          name: 'João',
-          lastName: 'Júnior',
-          cpf: '12312678902',
-          phone: '11987654321',
-          zipCode: '01001000',
-          user: {
-            email: 'joao2@email.com',
-            password: 'minhasenha123',
-          },
-        });
+      const customerPayload = {
+        name: 'João',
+        lastName: 'Júnior',
+        cpf: '12312678902',
+        phone: '11987654321',
+        zipCode: '01001000',
+        user: {
+          email: 'cliente_teste@teste.com',
+          password: 'senha123',
+        },
+      };
 
-      expect(customerRes.status).toBe(201);
+      const res = await request(server).post('/customer').send(customerPayload);
 
-      // pega o ID real retornado pelo backend
-      createdCustomerId = customerRes.body.customer?.id || customerRes.body.id;
-      console.log('✅ Cliente criado com ID real:', createdCustomerId);
+      //console.log(' Resposta da criação de cliente:', res.body);
+
+      createdCustomerId = res.body?.customer?.id;
+      expect(createdCustomerId).toBeDefined();
+      //console.log('Cliente criado via endpoint com ID:', createdCustomerId);
     });
 
     when(
@@ -105,12 +93,13 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const payload = mapTableToPayload(row);
+        payload.customerId = createdCustomerId;
 
-        // garante que o veículo use o customerId correto
-        payload.customer_id = createdCustomerId;
-        delete payload.customerId; // remove campo antigo se existir
+        //console.log('Payload enviado:', payload);
 
         response = await request(server).post('/vehicle').send(payload);
+        //console.log('Resposta do /vehicle:', response.body);
+        console.log('Teste: Veículo cadastrado com sucesso');
       },
     );
 

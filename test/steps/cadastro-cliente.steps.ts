@@ -85,6 +85,7 @@ defineFeature(feature, (test) => {
         const finalPayload = mapTableToPayload(row);
         //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log('Cenário 1: Cliente cadastrado com sucesso');
       },
     );
 
@@ -118,6 +119,7 @@ defineFeature(feature, (test) => {
         const finalPayload = mapTableToPayload(row);
         //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log('Cenário 2: Nome obrigatório');
       },
     );
 
@@ -148,6 +150,7 @@ defineFeature(feature, (test) => {
         const finalPayload = mapTableToPayload(row);
         //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log('Cenário 3: CPF invalido');
       },
     );
 
@@ -178,6 +181,7 @@ defineFeature(feature, (test) => {
         const finalPayload = mapTableToPayload(row);
         //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log('Cenário 4: Email invalido');
       },
     );
 
@@ -208,6 +212,7 @@ defineFeature(feature, (test) => {
         const finalPayload = mapTableToPayload(row);
         //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log('Cenário 5: Senha não preenchida');
       },
     );
 
@@ -233,6 +238,7 @@ defineFeature(feature, (test) => {
         const finalPayload = mapTableToPayload(row);
         //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log('Cenário 6: CEP inválido');
       },
     );
 
@@ -263,6 +269,7 @@ defineFeature(feature, (test) => {
         const finalPayload = mapTableToPayload(row);
         //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log('Cenário 7: Verificar senha com menos de 8 caracteres');
       },
     );
 
@@ -296,6 +303,9 @@ defineFeature(feature, (test) => {
         const finalPayload = mapTableToPayload(row);
         //console.log('Payload enviado:', finalPayload);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log(
+          'Cenário 8:  Verificar número de telefone com menos dígitos',
+        );
       },
     );
 
@@ -345,6 +355,7 @@ defineFeature(feature, (test) => {
         const row = table[0];
         const finalPayload = mapTableToPayload(row);
         response = await request(server).post('/customer').send(finalPayload);
+        console.log('Cenário 9: CPF duplicado');
       },
     );
 
