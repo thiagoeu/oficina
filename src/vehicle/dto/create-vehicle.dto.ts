@@ -25,7 +25,7 @@ export class CreateVehicleDto {
   @IsNumber({}, { message: 'Ano é obrigatório' })
   year: number;
 
-  @IsDefined({ message: 'O ID do cliente é obrigatório' })
+  @IsDefined({ message: 'Cliente deve ser selecionado' })
   @IsNumber()
   customerId: number;
 }

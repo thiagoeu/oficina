@@ -10,10 +10,10 @@ Content-Type: application/json
 
 {
   "plate": "ABC1D223",
-  "brand": "",
+  "brand": "ford",
   "model": "Corolla",
   "color": "Prata",
-  "year": null,
-  "customerId": 345
+  "year": 1800,
+  "customerId": null
 }
 

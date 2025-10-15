@@ -22,15 +22,15 @@ export class VehicleService {
   async create(createVehicleDto: CreateVehicleDto) {
     const { plate, customerId } = createVehicleDto;
 
-    // 1️⃣ Verifica se o cliente existe
+    //  Verifica se o cliente existe
     const customer = await this.customerRepository.findOne({
       where: { id: customerId },
     });
     if (!customer) {
-      throw new NotFoundException('Cliente não encontrado');
+      throw new NotFoundException('Cliente deve ser selecionado');
     }
 
-    // 2️⃣ Verifica se já existe veículo com essa placa
+    //  Verifica se já existe veículo com essa placa
     const vehicleExists = await this.vehicleRepository.findOne({
       where: { plate },
     });
@@ -38,7 +38,13 @@ export class VehicleService {
       throw new ConflictException('Veículo com esta placa já existe');
     }
 
-    // 3️⃣ Cria o veículo vinculado ao cliente
+    if (
+      createVehicleDto.year < 1900 ||
+      createVehicleDto.year > new Date().getFullYear()
+    ) {
+      throw new ConflictException('Ano inválido');
+    }
+
     const vehicle = this.vehicleRepository.create({
       ...createVehicleDto,
       customer,
