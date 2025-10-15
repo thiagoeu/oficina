@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
   "plate": "ABC1D223",
-  "brand": "Toyota",
+  "brand": "",
   "model": "Corolla",
   "color": "Prata",
   "year": null,

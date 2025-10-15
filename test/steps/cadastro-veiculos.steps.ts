@@ -166,4 +166,157 @@ defineFeature(feature, (test) => {
       expect(msgBody).toMatch(/Ano é obrigatório/i);
     });
   });
+
+  // Cenário 3: Verificar campo obrigatório Modelo vazio
+  test('Erro verificar campo obrigatório Modelo vazio', ({
+    given,
+    and,
+    when,
+    then,
+  }) => {
+    given('que o banco de dados de teste está limpo', async () => {
+      await prepareDatabase();
+    });
+
+    and('existe um cliente previamente cadastrado', async () => {
+      const customerPayload = {
+        name: 'Kevin',
+        lastName: 'Jr',
+        cpf: '12345678901',
+        phone: '11999999999',
+        zipCode: '12345678',
+        user: {
+          email: 'kevinjr@teste.com',
+          password: 'senha123',
+        },
+      };
+
+      const res = await request(server).post('/customer').send(customerPayload);
+      createdCustomerId = res.body?.customer?.id;
+      expect(createdCustomerId).toBeDefined();
+    });
+
+    when(
+      /^eu envio uma requisição POST para "\/vehicle" com:$/,
+      async (table) => {
+        const row = table[0];
+        const payload = mapTableToPayload(row);
+        payload.customerId = createdCustomerId;
+        response = await request(server).post('/vehicle').send(payload);
+      },
+    );
+
+    then('o sistema deve retornar status 400', () => {
+      expect(response.status).toBe(400);
+    });
+
+    and('o corpo deve conter a mensagem "Modelo é obrigatório"', () => {
+      const msgBody = Array.isArray(response.body.message)
+        ? response.body.message[0]
+        : response.body.message;
+      expect(msgBody).toMatch(/Modelo é obrigatório/i);
+    });
+  });
+
+  // Cenário 4: Verificar campo obrigatório Cor vazio
+  test('Erro verificar campo obrigatório Cor vazio', ({
+    given,
+    and,
+    when,
+    then,
+  }) => {
+    given('que o banco de dados de teste está limpo', async () => {
+      await prepareDatabase();
+    });
+
+    and('existe um cliente previamente cadastrado', async () => {
+      const customerPayload = {
+        name: 'Kevin',
+        lastName: 'Jr',
+        cpf: '12345678901',
+        phone: '11999999999',
+        zipCode: '12345678',
+        user: {
+          email: 'kevinjr@teste.com',
+          password: 'senha123',
+        },
+      };
+
+      const res = await request(server).post('/customer').send(customerPayload);
+      createdCustomerId = res.body?.customer?.id;
+      expect(createdCustomerId).toBeDefined();
+    });
+
+    when(
+      /^eu envio uma requisição POST para "\/vehicle" com:$/,
+      async (table) => {
+        const row = table[0];
+        const payload = mapTableToPayload(row);
+        payload.customerId = createdCustomerId;
+        response = await request(server).post('/vehicle').send(payload);
+      },
+    );
+
+    then('o sistema deve retornar status 400', () => {
+      expect(response.status).toBe(400);
+    });
+
+    and('o corpo deve conter a mensagem "Cor é obrigatória"', () => {
+      const msgBody = Array.isArray(response.body.message)
+        ? response.body.message[0]
+        : response.body.message;
+      expect(msgBody).toMatch(/Cor é obrigatória/i);
+    });
+  });
+
+  // Cenário 5: Verificar campo obrigatório Marca vazio
+  test('Erro verificar campo obrigatório Marca vazio', ({
+    given,
+    and,
+    when,
+    then,
+  }) => {
+    given('que o banco de dados de teste está limpo', async () => {
+      await prepareDatabase();
+    });
+
+    and('existe um cliente previamente cadastrado', async () => {
+      const customerPayload = {
+        name: 'Kevin',
+        lastName: 'Jr',
+        cpf: '12345678901',
+        phone: '11999999999',
+        zipCode: '12345678',
+        user: {
+          email: 'kevinjr@teste.com',
+          password: 'senha123',
+        },
+      };
+
+      const res = await request(server).post('/customer').send(customerPayload);
+      createdCustomerId = res.body?.customer?.id;
+      expect(createdCustomerId).toBeDefined();
+    });
+
+    when(
+      /^eu envio uma requisição POST para "\/vehicle" com:$/,
+      async (table) => {
+        const row = table[0];
+        const payload = mapTableToPayload(row);
+        payload.customerId = createdCustomerId;
+        response = await request(server).post('/vehicle').send(payload);
+        console.log(payload);
+      },
+    );
+
+    then('o sistema deve retornar status 400', () => {
+      expect(response.status).toBe(400);
+    });
+
+    and('o corpo deve conter a mensagem "Marca é obrigatória"', () => {
+      and(/^o corpo deve conter a mensagem "(.*)"$/, (msg) => {
+        expect(response.body.message[0]).toMatch(new RegExp(msg, 'i'));
+      });
+    });
+  });
 });
