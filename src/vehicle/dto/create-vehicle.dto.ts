@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateVehicleDto {
   @IsNotEmpty({ message: 'Placa é obrigatória' })
@@ -17,8 +17,8 @@ export class CreateVehicleDto {
   @IsString()
   color: string;
 
-  @IsNotEmpty({ message: 'Ano é obrigatório' })
-  @IsNumber()
+  //@IsDefined({ message: 'Ano é obrigatório' }) // Garante que o campo foi enviado
+  @IsNumber({}, { message: 'Ano é obrigatório' }) // Garante que o valor é um número
   year: number;
 
   @IsNotEmpty({ message: 'O ID do cliente é obrigatório' })

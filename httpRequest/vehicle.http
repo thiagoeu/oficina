@@ -13,7 +13,7 @@ Content-Type: application/json
   "brand": "Toyota",
   "model": "Corolla",
   "color": "Prata",
-  "year": 2021,
-  "customerId": 85
+  "year": null,
+  "customerId": 345
 }
 

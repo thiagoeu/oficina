@@ -7,12 +7,19 @@ import { DataSource } from 'typeorm';
 
 const feature = loadFeature('./test/features/cadastro-veiculos.feature');
 
+// Função utilitária para mapear tabela Gherkin para objeto JSON
 function mapTableToPayload(row: Record<string, any>): any {
   const payload: any = {};
   for (const key in row) {
     if (!row.hasOwnProperty(key)) continue;
-    let value: any = row[key];
-    if (['year'].includes(key.toLowerCase())) value = Number(value);
+    let value = row[key];
+
+    if (value === 'null' || value === '') {
+      value = null;
+    } else if (!isNaN(Number(value))) {
+      value = Number(value);
+    }
+
     payload[key] = value;
   }
   return payload;
@@ -31,6 +38,7 @@ defineFeature(feature, (test) => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -48,14 +56,16 @@ defineFeature(feature, (test) => {
     await app.close();
   });
 
+  // Limpa o banco antes de cada teste
   async function prepareDatabase() {
     if (!dataSource || !dataSource.isInitialized) return;
-    const tablesToClean = ['vehicles', 'customers', 'users'];
-    for (const table of tablesToClean) {
+    const tables = ['vehicles', 'customers', 'users'];
+    for (const table of tables) {
       await dataSource.query(`DELETE FROM "${table}";`);
     }
   }
 
+  // Cenário 1: Cadastro de veículo com todos os campos corretos
   test('Cadastro de veículo com todos os campos corretos', ({
     given,
     and,
@@ -68,24 +78,20 @@ defineFeature(feature, (test) => {
 
     and('existe um cliente previamente cadastrado', async () => {
       const customerPayload = {
-        name: 'João',
-        lastName: 'Júnior',
-        cpf: '12312678902',
-        phone: '11987654321',
-        zipCode: '01001000',
+        name: 'Kevin',
+        lastName: 'Jr',
+        cpf: '12345678901',
+        phone: '11999999999',
+        zipCode: '12345678',
         user: {
-          email: 'cliente_teste@teste.com',
+          email: 'kevinjr@teste.com',
           password: 'senha123',
         },
       };
 
       const res = await request(server).post('/customer').send(customerPayload);
-
-      //console.log(' Resposta da criação de cliente:', res.body);
-
       createdCustomerId = res.body?.customer?.id;
       expect(createdCustomerId).toBeDefined();
-      //console.log('Cliente criado via endpoint com ID:', createdCustomerId);
     });
 
     when(
@@ -93,13 +99,8 @@ defineFeature(feature, (test) => {
       async (table) => {
         const row = table[0];
         const payload = mapTableToPayload(row);
-        payload.customerId = createdCustomerId;
-
-        //console.log('Payload enviado:', payload);
-
+        payload.customerId = createdCustomerId; // usa o cliente criado
         response = await request(server).post('/vehicle').send(payload);
-        //console.log('Resposta do /vehicle:', response.body);
-        console.log('Teste: Veículo cadastrado com sucesso');
       },
     );
 
@@ -113,5 +114,56 @@ defineFeature(feature, (test) => {
         expect(response.body.message).toMatch(/sucesso/i);
       },
     );
+  });
+
+  // Cenário 2: Verificar campo obrigatório Ano vazio
+  test('Erro verificar campo obrigatório Ano vazio', ({
+    given,
+    and,
+    when,
+    then,
+  }) => {
+    given('que o banco de dados de teste está limpo', async () => {
+      await prepareDatabase();
+    });
+
+    and('existe um cliente previamente cadastrado', async () => {
+      const customerPayload = {
+        name: 'Kevin',
+        lastName: 'Jr',
+        cpf: '12345678901',
+        phone: '11999999999',
+        zipCode: '12345678',
+        user: {
+          email: 'kevinjr@teste.com',
+          password: 'senha123',
+        },
+      };
+
+      const res = await request(server).post('/customer').send(customerPayload);
+      createdCustomerId = res.body?.customer?.id;
+      expect(createdCustomerId).toBeDefined();
+    });
+
+    when(
+      /^eu envio uma requisição POST para "\/vehicle" com:$/,
+      async (table) => {
+        const row = table[0];
+        const payload = mapTableToPayload(row);
+        payload.customerId = createdCustomerId;
+        response = await request(server).post('/vehicle').send(payload);
+      },
+    );
+
+    then('o sistema deve retornar status 400', () => {
+      expect(response.status).toBe(400);
+    });
+
+    and('o corpo deve conter a mensagem "Ano é obrigatório"', () => {
+      const msgBody = Array.isArray(response.body.message)
+        ? response.body.message[0]
+        : response.body.message;
+      expect(msgBody).toMatch(/Ano é obrigatório/i);
+    });
   });
 });
