@@ -42,3 +42,13 @@ Use este comando para iniciar a aplicação com _hot-reload_.
 ```bash
 npm run start:dev
 ```
+
+## Executar os testes
+
+### Execução dos testes BDD
+
+Use este comando para rodar os testes BDD.
+
+```bash
+npm run test:e2e
+```

@@ -101,6 +101,9 @@ defineFeature(feature, (test) => {
         const payload = mapTableToPayload(row);
         payload.customerId = createdCustomerId; // usa o cliente criado
         response = await request(server).post('/vehicle').send(payload);
+        console.log(
+          'Cenário 1: Cadastro de veículo com todos os campos corretos',
+        );
       },
     );
 
@@ -152,6 +155,7 @@ defineFeature(feature, (test) => {
         const payload = mapTableToPayload(row);
         payload.customerId = createdCustomerId;
         response = await request(server).post('/vehicle').send(payload);
+        console.log('Cenário 2: Verificar campo obrigatório Ano vazio');
       },
     );
 
@@ -203,6 +207,7 @@ defineFeature(feature, (test) => {
         const payload = mapTableToPayload(row);
         payload.customerId = createdCustomerId;
         response = await request(server).post('/vehicle').send(payload);
+        console.log('Cenário 3: Verificar campo obrigatório Modelo vazio');
       },
     );
 
@@ -254,6 +259,7 @@ defineFeature(feature, (test) => {
         const payload = mapTableToPayload(row);
         payload.customerId = createdCustomerId;
         response = await request(server).post('/vehicle').send(payload);
+        console.log('Cenário 4: Verificar campo obrigatório Cor vazio');
       },
     );
 
@@ -305,7 +311,7 @@ defineFeature(feature, (test) => {
         const payload = mapTableToPayload(row);
         payload.customerId = createdCustomerId;
         response = await request(server).post('/vehicle').send(payload);
-        console.log(payload);
+        console.log('Cenário 5: Verificar campo obrigatório Marca vazio');
       },
     );
 
@@ -360,6 +366,9 @@ defineFeature(feature, (test) => {
         }
 
         response = await request(server).post('/vehicle').send(payload);
+        console.log(
+          'Cenário 6: Erro verificar campo obrigatório Cliente vazio',
+        );
       },
     );
 
@@ -406,6 +415,7 @@ defineFeature(feature, (test) => {
         const payload = mapTableToPayload(row);
         payload.customerId = createdCustomerId;
         response = await request(server).post('/vehicle').send(payload);
+        console.log('Cenário 7: Erro verificar campo Ano inválido');
       },
     );
 
