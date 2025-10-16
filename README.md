@@ -43,7 +43,12 @@ Use este comando para iniciar a aplicação com _hot-reload_.
 npm run start:dev
 ```
 
-## Executar os testes
+## 🧪 Testes
+
+Na pasta **`test`** estão localizados os arquivos escritos em **Gherkin (`.feature`)**, que descrevem os cenários de teste comportamentais (BDD).
+Os **steps** correspondentes implementam os **testes end-to-end (E2E)** utilizando **Jest**, **Supertest** e **jest-cucumber**, garantindo a integração completa entre as camadas da aplicação (rotas, serviços e banco de dados).
+
+Cada cenário `.feature` descreve um fluxo de uso real, e os steps executam as requisições HTTP contra a aplicação **NestJS**, validando o comportamento esperado do sistema.
 
 ### Execução dos testes BDD
 
