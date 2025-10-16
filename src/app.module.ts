@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { CustomerModule } from './customer/customer.module';
 import { ServiceOrderModule } from './service-order/service-order.module';
+import { MechanicModule } from './mechanic/mechanic.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { ServiceOrderModule } from './service-order/service-order.module';
     VehicleModule,
     CustomerModule,
     ServiceOrderModule,
+    MechanicModule,
   ],
   controllers: [AppController],
   providers: [AppService],

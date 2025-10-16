@@ -1,11 +1,71 @@
-import { Injectable } from '@nestjs/common';
+// service-order.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ServiceOrder } from './entities/service-order.entity';
 import { CreateServiceOrderDto } from './dto/create-service-order.dto';
+import { Customer } from '../customer/entities/customer.entity';
+import { Vehicle } from '../vehicle/entities/vehicle.entity';
+import { Mechanic } from '../mechanic/entities/mechanic.entity';
 import { UpdateServiceOrderDto } from './dto/update-service-order.dto';
 
 @Injectable()
 export class ServiceOrderService {
-  create(createServiceOrderDto: CreateServiceOrderDto) {
-    return 'This action adds a new serviceOrder';
+  constructor(
+    @InjectRepository(ServiceOrder)
+    private serviceOrderRepository: Repository<ServiceOrder>,
+
+    @InjectRepository(Customer)
+    private customerRepository: Repository<Customer>,
+
+    @InjectRepository(Vehicle)
+    private vehicleRepository: Repository<Vehicle>,
+
+    @InjectRepository(Mechanic)
+    private mechanicRepository: Repository<Mechanic>,
+  ) {}
+
+  async create(
+    createServiceOrderDto: CreateServiceOrderDto,
+  ): Promise<ServiceOrder> {
+    const { customer_id, vehicle_id, mechanic_id, ...rest } =
+      createServiceOrderDto;
+
+    // Verificar se as entidades relacionadas existem
+    const customer = await this.customerRepository.findOne({
+      where: { id: customer_id },
+    });
+    if (!customer)
+      throw new NotFoundException(
+        `Cliente com id ${customer_id} não encontrado.`,
+      );
+
+    const vehicle = await this.vehicleRepository.findOne({
+      where: { id: vehicle_id },
+    });
+    if (!vehicle)
+      throw new NotFoundException(
+        `Veículo com id ${vehicle_id} não encontrado.`,
+      );
+
+    const mechanic = await this.mechanicRepository.findOne({
+      where: { id: mechanic_id },
+    });
+    if (!mechanic)
+      throw new NotFoundException(
+        `Mecânico com id ${mechanic_id} não encontrado.`,
+      );
+
+    // Criar a entidade
+    const serviceOrder = this.serviceOrderRepository.create({
+      customer,
+      vehicle,
+      mechanic,
+      ...rest,
+    });
+
+    // Salvar no banco
+    return await this.serviceOrderRepository.save(serviceOrder);
   }
 
   findAll() {

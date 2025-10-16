@@ -419,7 +419,7 @@ defineFeature(feature, (test) => {
       },
     );
 
-    then('o sistema deve retornar status 400', () => {
+    then('o sistema deve retornar status 409', () => {
       expect(response.status).toBe(409);
     });
 

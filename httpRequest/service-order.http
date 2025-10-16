@@ -1,0 +1,17 @@
+@baseUrl = http://localhost:3000
+
+
+### Criar ordem de serviço
+POST {{baseUrl}}/service-order
+Content-Type: application/json
+
+{
+  "customer_id": 1,
+  "vehicle_id": 1,
+  "item": "freio",
+  "service": "troca freio",
+  "mechanic_id": 1,
+  "payment_method": "PIX",
+  "price": 1800
+}
+

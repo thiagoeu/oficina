@@ -9,7 +9,7 @@ POST {{baseUrl}}/customer
 Content-Type: application/json  
 
 {
-  "name": "asda",
+  "name": "eu",
   "lastName": "gelo",
   "cpf": "67812112111",
   "phone": "1234811901",

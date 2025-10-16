@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ServiceOrderService } from './service-order.service';
 import { CreateServiceOrderDto } from './dto/create-service-order.dto';
 import { UpdateServiceOrderDto } from './dto/update-service-order.dto';
@@ -8,8 +16,8 @@ export class ServiceOrderController {
   constructor(private readonly serviceOrderService: ServiceOrderService) {}
 
   @Post()
-  create(@Body() createServiceOrderDto: CreateServiceOrderDto) {
-    return this.serviceOrderService.create(createServiceOrderDto);
+  async create(@Body() createServiceOrderDto: CreateServiceOrderDto) {
+    return await this.serviceOrderService.create(createServiceOrderDto);
   }
 
   @Get()
@@ -23,7 +31,10 @@ export class ServiceOrderController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateServiceOrderDto: UpdateServiceOrderDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateServiceOrderDto: UpdateServiceOrderDto,
+  ) {
     return this.serviceOrderService.update(+id, updateServiceOrderDto);
   }
 

@@ -60,5 +60,5 @@ Feature: Cadastro de Veiculos
       When eu envio uma requisição POST para "/vehicle" com:
         | plate   | brand | model   | color  | year | customerId |
         | ABC1D23 | Toyota| Corolla | Preto  | 1700 | 8          |
-      Then o sistema deve retornar status 400
+      Then o sistema deve retornar status 409
       And o corpo deve conter a mensagem "Ano inválido"
