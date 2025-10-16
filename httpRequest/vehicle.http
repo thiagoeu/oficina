@@ -14,6 +14,6 @@ Content-Type: application/json
   "model": "Corolla",
   "color": "Prata",
   "year": 1900,
-  "customerId": 10
+  "customerId": 28
 }
 

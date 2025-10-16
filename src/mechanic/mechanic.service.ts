@@ -17,6 +17,7 @@ export class MechanicService {
 
     return {
       message: 'Mecânico criado com sucesso.',
+      mechanic,
     };
   }
 

@@ -57,5 +57,6 @@ export class ServiceOrder {
   payment_method: PaymentMethod;
 
   @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 }

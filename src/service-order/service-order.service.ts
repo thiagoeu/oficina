@@ -25,9 +25,7 @@ export class ServiceOrderService {
     private mechanicRepository: Repository<Mechanic>,
   ) {}
 
-  async create(
-    createServiceOrderDto: CreateServiceOrderDto,
-  ): Promise<ServiceOrder> {
+  async create(createServiceOrderDto: CreateServiceOrderDto) {
     const { customer_id, vehicle_id, mechanic_id, ...rest } =
       createServiceOrderDto;
 
@@ -64,8 +62,9 @@ export class ServiceOrderService {
       ...rest,
     });
 
+    const data = await this.serviceOrderRepository.save(serviceOrder);
     // Salvar no banco
-    return await this.serviceOrderRepository.save(serviceOrder);
+    return { message: 'Ordem de serviço criada com sucesso', data };
   }
 
   findAll() {

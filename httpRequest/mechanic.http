@@ -1,10 +1,7 @@
 @baseUrl = http://localhost:3000
 
-### Listar clientes
-GET {{baseUrl}}/mechanic
-Content-Type: application/json
 
-### Criar clientes
+### Criar mecanico
 POST {{baseUrl}}/mechanic
 Content-Type: application/json  
 
