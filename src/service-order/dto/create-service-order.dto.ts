@@ -10,6 +10,7 @@ import { Type } from 'class-transformer';
 import { PaymentMethod } from '../entities/service-order.entity';
 
 export class CreateServiceOrderDto {
+  @IsNotEmpty({ message: 'Cliente deve ser informado' })
   @IsInt()
   @Type(() => Number)
   customer_id: number;

@@ -136,9 +136,6 @@ defineFeature(feature, (test) => {
         payload.mechanic_id = createdMechanicId;
 
         response = await request(server).post(path).send(payload);
-        console.log('Resposta:', response.body);
-        console.log('Status:', response.status);
-        console.log('Payload enviado:', payload);
       },
     );
 
