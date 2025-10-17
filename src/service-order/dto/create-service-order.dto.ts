@@ -35,7 +35,10 @@ export class CreateServiceOrderDto {
   payment_method: PaymentMethod;
 
   @IsNumber({ maxDecimalPlaces: 2 })
-  @IsPositive()
+  @IsPositive({
+    message:
+      'Criar OS com valor de pagamento inconsistente (Valor de pagamento inválido)',
+  })
   @Type(() => Number)
   price: number;
 }

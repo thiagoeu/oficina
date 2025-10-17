@@ -58,6 +58,9 @@ export class ServiceOrderService {
       throw new NotFoundException('Peça indisponível em estoque');
     }
 
+    if (createServiceOrderDto.price < 0 || createServiceOrderDto.price === 0) {
+      throw new NotFoundException('Valor de pagamento inválido');
+    }
     // Criar a entidade
     const serviceOrder = this.serviceOrderRepository.create({
       customer,
