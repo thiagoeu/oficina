@@ -5,6 +5,7 @@ import {
   IsPositive,
   IsString,
   IsInt,
+  IsOptional,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PaymentMethod } from '../entities/service-order.entity';
@@ -28,7 +29,6 @@ export class CreateServiceOrderDto {
   item: string;
 
   @IsString()
-  @IsNotEmpty()
   service: string;
 
   @IsEnum(PaymentMethod)

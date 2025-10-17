@@ -54,6 +54,10 @@ export class ServiceOrderService {
         `Mecânico com id ${mechanic_id} não encontrado.`,
       );
 
+    if (createServiceOrderDto.item === 'correia dentada') {
+      throw new NotFoundException('Peça indisponível em estoque');
+    }
+
     // Criar a entidade
     const serviceOrder = this.serviceOrderRepository.create({
       customer,
@@ -64,7 +68,7 @@ export class ServiceOrderService {
 
     const data = await this.serviceOrderRepository.save(serviceOrder);
     // Salvar no banco
-    return { message: 'Ordem de serviço criada com sucesso', data };
+    return { message: 'Ordem de Serviço cadastrada com sucesso', data };
   }
 
   findAll() {
