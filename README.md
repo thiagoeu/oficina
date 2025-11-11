@@ -3,9 +3,13 @@
 ## Equipe
 
 Thiago Barbosa 
+
 Kevin Ryan
+
 Gabriel Domingos
+
 Luiz Oliveira
+
 Ryan Soares
 
 
