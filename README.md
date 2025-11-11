@@ -1,5 +1,14 @@
 # 🛠️ Aplicação Oficina - Teste de Software
 
+## Equipe
+
+Thiago Barbosa 
+Kevin Ryan
+Gabriel Domingos
+Luiz Oliveira
+Ryan Soares
+
+
 ## 📋 Sobre o Projeto
 
 Sistema de gerenciamento para oficina mecânica desenvolvido como parte da disciplina de Teste de Software. A aplicação permite o cadastro e controle de clientes, veículos e ordens de serviço.
